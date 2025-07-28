@@ -29,12 +29,13 @@ jobs:
       - name: 📄 Append JSON to CSV
         run: python append_json_csv.py
 
-      - name: ☁️ Upload CSV to Supabase
-        run: python upload_to_supabase.py
+      - name: 🧪 Debug Supabase env vars
+        run: |
+          echo "SUPABASE_URL=$SUPABASE_URL"
+          echo "SUPABASE_KEY=${SUPABASE_KEY:0:4}********"
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          SUPABASE_TABLE: ${{ secrets.SUPABASE_TABLE }}
 
       - name: ✅ List output
         run: ls -R output
