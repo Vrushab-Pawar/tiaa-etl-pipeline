@@ -1,9 +1,9 @@
-name: 🚀 Run ETL Pipeline and Upload to Supabase
+name: 🕷 Run TIAA ETL Crawler and Append to CSV
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 6 * * *" # Runs daily at 6 AM UTC / 11:30 AM IST
+  # schedule:
+  #   - cron: "0 6 * * *"  # Optional: runs daily at 6 AM UTC
 
 jobs:
   run-etl:
@@ -23,21 +23,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🔐 Export environment variables from ENV_FILE
+      - name: 🕷 Run Scrapy spider
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          echo "📝 .env file content:"
-          cat .env
+          mkdir -p output
+          python -m scrapy crawl bankrate_spider -s LOG_LEVEL=WARNING
 
-          echo "🔄 Exporting environment variables..."
-          set -a
-          source .env
-          set +a
+      - name: 🧾 Append .jsonl to CSV
+        run: python append_json_csv.py
 
-          echo "🔍 Checking variables:"
-          echo "SUPABASE_URL=$SUPABASE_URL"
-          echo "SUPABASE_KEY=${SUPABASE_KEY:0:5}********"
-          echo "SUPABASE_TABLE=$SUPABASE_TABLE"
-
-      - name: 🧠 Run Supabase Upload
-        run: python upload_to_supabase.py
+      - name: 📎 Upload final CSV as artifact (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortgage_rates_csv
+          path: output/mortgage_rates.csv
