@@ -1,9 +1,9 @@
 name: 🕷 Run TIAA ETL Crawler and Append to CSV
 
 on:
-  workflow_dispatch:
-  # schedule:
-  #   - cron: "0 6 * * *"  # Optional: runs daily at 6 AM UTC
+  schedule:
+    - cron: "30 1 * * *"  # 7:00 AM IST = 1:30 AM UTC
+  workflow_dispatch:  # allows manual runs too
 
 jobs:
   run-etl:
@@ -31,7 +31,7 @@ jobs:
       - name: 🧾 Append .jsonl to CSV
         run: python append_json_csv.py
 
-      - name: 📎 Upload final CSV as artifact (optional)
+      - name: 📎 Upload CSV as artifact (optional)
         uses: actions/upload-artifact@v4
         with:
           name: mortgage_rates_csv
