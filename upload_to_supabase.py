@@ -1,58 +1,53 @@
 import os
 import csv
 import sys
-from datetime import datetime
-from pathlib import Path
 from supabase import create_client, Client
-from dotenv import load_dotenv
 
-# Load .env file from the project root directory
-dotenv_path = Path.cwd() / ".env"
-if not dotenv_path.exists():
-    print(f"❌ .env file not found at {dotenv_path}")
-    sys.exit(1)
-
-load_dotenv(dotenv_path)
-
-# Get Supabase credentials
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-SUPABASE_TABLE = os.getenv("SUPABASE_TABLE", "mortgage_rates")
+# Supabase credentials from GitHub Secrets (CI/CD)
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_TABLE = os.environ.get("SUPABASE_TABLE", "mortgage_rates")
 CSV_PATH = os.path.join("output", "mortgage_rates.csv")
 
+# Validate Supabase credentials
 if not SUPABASE_URL or not SUPABASE_KEY:
-    print("❌ Missing Supabase credentials.")
+    print("❌ Missing Supabase credentials. Ensure secrets are passed as environment variables.")
     sys.exit(1)
 
+# Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Load current Supabase records (only product + date keys to avoid duplicates)
+# Load current Supabase records to avoid duplicates
 try:
     response = supabase.table(SUPABASE_TABLE).select("loan_product", "date").execute()
     existing_records = set((item["loan_product"], item["date"]) for item in response.data)
+    print(f"📊 Fetched {len(existing_records)} existing records from Supabase.")
 except Exception as e:
     print(f"❌ Supabase fetch error: {e}")
     sys.exit(1)
 
 # Prepare new rows from CSV
 new_rows = []
-with open(CSV_PATH, "r", encoding="utf-8") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        key = (row["loan_product"], row["date"])
-        if key not in existing_records:
-            # Ensure numeric fields are correct
-            try:
-                row["interest_rate"] = float(row["interest_rate"])
-                row["apr"] = float(row["apr"])
-                row["loan_term_years"] = int(row["loan_term_years"])
-                row["forecasted_rate"] = float(row["forecasted_rate"])
-            except ValueError as e:
-                print(f"⚠️ Skipping invalid row: {row}")
-                continue
-            new_rows.append(row)
+try:
+    with open(CSV_PATH, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            key = (row["loan_product"], row["date"])
+            if key not in existing_records:
+                try:
+                    row["interest_rate"] = float(row["interest_rate"])
+                    row["apr"] = float(row["apr"])
+                    row["loan_term_years"] = int(row["loan_term_years"])
+                    row["forecasted_rate"] = float(row["forecasted_rate"])
+                except ValueError:
+                    print(f"⚠️ Skipping invalid row due to type error: {row}")
+                    continue
+                new_rows.append(row)
+except FileNotFoundError:
+    print(f"❌ CSV file not found at: {CSV_PATH}")
+    sys.exit(1)
 
-# Upload new rows
+# Upload new rows to Supabase
 if new_rows:
     try:
         supabase.table(SUPABASE_TABLE).insert(new_rows).execute()
@@ -62,4 +57,3 @@ if new_rows:
         sys.exit(1)
 else:
     print("📁 No new data to upload.")
-
