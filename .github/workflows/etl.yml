@@ -31,6 +31,10 @@ jobs:
 
       - name: ☁️ Upload CSV to Supabase
         run: python upload_to_supabase.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_TABLE: ${{ secrets.SUPABASE_TABLE }}
 
       - name: ✅ List output
         run: ls -R output
