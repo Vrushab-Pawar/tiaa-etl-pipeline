@@ -1,0 +1,17 @@
+# Ignore virtual environment
+TIAA/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Logs and outputs
+*.log
+*.csv
+*.jsonl
+
+# Env variables
+.env
+
+# VS Code settings
+.vscode/
