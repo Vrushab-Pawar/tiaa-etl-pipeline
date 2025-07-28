@@ -9,6 +9,8 @@ SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 SUPABASE_TABLE = os.environ.get("SUPABASE_TABLE", "mortgage_rates")
 CSV_PATH = os.path.join("output", "mortgage_rates.csv")
 
+print("🔎 SUPABASE_URL:", SUPABASE_URL)
+print("🔎 SUPABASE_KEY starts with:", SUPABASE_KEY[:4] if SUPABASE_KEY else None)
 # Validate Supabase credentials
 if not SUPABASE_URL or not SUPABASE_KEY:
     print("❌ Missing Supabase credentials. Ensure secrets are passed as environment variables.")
