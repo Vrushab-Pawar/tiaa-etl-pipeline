@@ -1,7 +1,7 @@
 name: TIAA ETL Workflow
 
 on:
-  workflow_dispatch:  # manual trigger for now; use `schedule:` for cron jobs
+  workflow_dispatch:
 
 jobs:
   run-etl:
@@ -21,6 +21,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: 🔐 Load ENV_FILE secret into environment
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > temp.env
+          set -a
+          source temp.env
+          set +a
+
       - name: 🕷 Run Scrapy Spider
         run: |
           mkdir -p output
@@ -29,13 +36,8 @@ jobs:
       - name: 📄 Append JSON to CSV
         run: python append_json_csv.py
 
-      - name: 🧪 Debug Supabase env vars
-        run: |
-          echo "SUPABASE_URL=$SUPABASE_URL"
-          echo "SUPABASE_KEY=${SUPABASE_KEY:0:4}********"
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      - name: ☁️ Upload to Supabase
+        run: python upload_to_supabase.py
 
       - name: ✅ List output
         run: ls -R output
