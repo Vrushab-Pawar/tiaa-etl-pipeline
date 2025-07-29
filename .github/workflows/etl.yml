@@ -1,4 +1,4 @@
-name: 🕷 Run TIAA ETL Crawler and Append to CSV
+name: 🕷 Run TIAA ETL Crawler
 
 on:
   schedule:
@@ -30,6 +30,13 @@ jobs:
 
       - name: 🧾 Append .jsonl to CSV
         run: python append_json_csv.py
+
+      - name: 🚀 Upload data to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_TABLE: mortgage_rates
+        run: python upload_to_supabase.py
 
       - name: 📎 Upload CSV as artifact (optional)
         uses: actions/upload-artifact@v4
