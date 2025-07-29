@@ -36,7 +36,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           SUPABASE_TABLE: mortgage_rates
-        print(f"SUPABASE_URL: '{SUPABASE_URL}'")
+          print(f"SUPABASE_URL: '{SUPABASE_URL}'")
 
       - name: 📎 Upload CSV as artifact (optional)
         uses: actions/upload-artifact@v4
