@@ -39,8 +39,6 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           SUPABASE_TABLE: mortgage_rates
         run: |
-          if [[ -z "$SUPABASE_URL" ]]; then echo "❌ SUPABASE_URL is not set!"; exit 1; fi
-          if [[ $SUPABASE_URL != https://*supabase.co ]]; then echo "❌ SUPABASE_URL format is invalid!"; exit 1; fi
           python upload_to_supabase.py
 
       - name: 📎 Upload CSV as artifact (optional)
