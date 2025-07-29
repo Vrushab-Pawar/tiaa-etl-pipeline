@@ -44,7 +44,7 @@ jobs:
 
       - name: 💾 Add, commit and push mortgage_rates.csv
         run: |
-          git add output/mortgage_rates.csv
+          git add -f output/mortgage_rates.csv
           git diff --cached --quiet || git commit -m "Update mortgage_rates.csv after ETL run"
           git push
         env:
