@@ -1,9 +1,9 @@
-name: 🕷 Run TIAA ETL Crawler and Upload to Supabase
+name: 🕷 Run TIAA ETL Crawler
 
 on:
   schedule:
     - cron: "30 1 * * *"  # Runs daily at 7:00 AM IST (1:30 AM UTC)
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:      # Allows manual trigger
 
 jobs:
   run-etl:
@@ -13,7 +13,7 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: true  # Keeps GITHUB_TOKEN for git push
+          persist-credentials: true  # Enables git push with GITHUB_TOKEN
 
       - name: 🐍 Set up Python 3.11
         uses: actions/setup-python@v5
@@ -39,7 +39,8 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           SUPABASE_TABLE: mortgage_rates
         run: |
-          echo "SUPABASE_URL is set (masked for security)."
+          if [[ -z "$SUPABASE_URL" ]]; then echo "❌ SUPABASE_URL is not set!"; exit 1; fi
+          if [[ $SUPABASE_URL != https://*supabase.co ]]; then echo "❌ SUPABASE_URL format is invalid!"; exit 1; fi
           python upload_to_supabase.py
 
       - name: 📎 Upload CSV as artifact (optional)
