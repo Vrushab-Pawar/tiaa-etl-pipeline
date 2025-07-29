@@ -1,20 +1,9 @@
 import os
 import csv
 import sys
-from datetime import datetime
-from pathlib import Path
 from supabase import create_client, Client
-from dotenv import load_dotenv
 
-# Load .env file from the project root directory
-dotenv_path = Path.cwd() / ".env"
-if not dotenv_path.exists():
-    print(f"❌ .env file not found at {dotenv_path}")
-    sys.exit(1)
-
-load_dotenv(dotenv_path)
-
-# Get Supabase credentials
+# Get Supabase credentials from environment (injected by GitHub Actions)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 SUPABASE_TABLE = os.getenv("SUPABASE_TABLE", "mortgage_rates")
@@ -41,13 +30,13 @@ with open(CSV_PATH, "r", encoding="utf-8") as f:
     for row in reader:
         key = (row["loan_product"], row["date"])
         if key not in existing_records:
-            # Ensure numeric fields are correct
+            # Validate and convert numeric fields
             try:
                 row["interest_rate"] = float(row["interest_rate"])
                 row["apr"] = float(row["apr"])
                 row["loan_term_years"] = int(row["loan_term_years"])
                 row["forecasted_rate"] = float(row["forecasted_rate"])
-            except ValueError as e:
+            except ValueError:
                 print(f"⚠️ Skipping invalid row: {row}")
                 continue
             new_rows.append(row)
@@ -62,4 +51,3 @@ if new_rows:
         sys.exit(1)
 else:
     print("📁 No new data to upload.")
-
