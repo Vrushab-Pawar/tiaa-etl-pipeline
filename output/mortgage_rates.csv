@@ -174,3 +174,10 @@ loan_product,interest_rate,apr,loan_term_years,lender_name,updated_date,forecast
 30-Year Fixed Rate FHA,7.03,7.11,30,Bankrate,2025-08-22,7.18,AutomatedScraper,2025-08-22
 30-Year Fixed Rate VA,6.91,6.95,30,Bankrate,2025-08-22,7.06,AutomatedScraper,2025-08-22
 30-Year Fixed Rate Jumbo,6.58,6.63,30,Bankrate,2025-08-22,6.73,AutomatedScraper,2025-08-22
+30-Year Fixed Rate,6.6,6.66,30,Bankrate,2025-08-23,6.75,AutomatedScraper,2025-08-23
+20-Year Fixed Rate,6.32,6.41,20,Bankrate,2025-08-23,6.47,AutomatedScraper,2025-08-23
+15-Year Fixed Rate,5.79,5.89,15,Bankrate,2025-08-23,5.94,AutomatedScraper,2025-08-23
+10-Year Fixed Rate,5.77,5.85,10,Bankrate,2025-08-23,5.92,AutomatedScraper,2025-08-23
+30-Year Fixed Rate FHA,6.24,6.3,30,Bankrate,2025-08-23,6.39,AutomatedScraper,2025-08-23
+30-Year Fixed Rate VA,6.4,6.44,30,Bankrate,2025-08-23,6.55,AutomatedScraper,2025-08-23
+30-Year Fixed Rate Jumbo,6.66,6.71,30,Bankrate,2025-08-23,6.81,AutomatedScraper,2025-08-23
