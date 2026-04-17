@@ -1819,3 +1819,10 @@ loan_product,interest_rate,apr,loan_term_years,lender_name,updated_date,forecast
 30-Year Fixed Rate FHA,6.35,6.41,30,Bankrate,2026-04-16,6.5,AutomatedScraper,2026-04-16
 30-Year Fixed Rate VA,6.55,6.61,30,Bankrate,2026-04-16,6.7,AutomatedScraper,2026-04-16
 30-Year Fixed Rate Jumbo,6.47,6.5,30,Bankrate,2026-04-16,6.62,AutomatedScraper,2026-04-16
+30-Year Fixed Rate,6.34,6.41,30,Bankrate,2026-04-17,6.49,AutomatedScraper,2026-04-17
+20-Year Fixed Rate,6.12,6.19,20,Bankrate,2026-04-17,6.27,AutomatedScraper,2026-04-17
+15-Year Fixed Rate,5.72,5.83,15,Bankrate,2026-04-17,5.87,AutomatedScraper,2026-04-17
+10-Year Fixed Rate,5.63,5.71,10,Bankrate,2026-04-17,5.78,AutomatedScraper,2026-04-17
+30-Year Fixed Rate FHA,5.96,6.01,30,Bankrate,2026-04-17,6.11,AutomatedScraper,2026-04-17
+30-Year Fixed Rate VA,6.24,6.29,30,Bankrate,2026-04-17,6.39,AutomatedScraper,2026-04-17
+30-Year Fixed Rate Jumbo,6.53,6.57,30,Bankrate,2026-04-17,6.68,AutomatedScraper,2026-04-17
